@@ -60,6 +60,22 @@ function ContractReader({rpcUrl, contractAddress, contractABI}) {
         (entry) => entry.type === "function" && isReadFunction(entry)
     );
 
+    const isArrayInput = (inputType) => {
+        return inputType.endsWith("[]");
+    };
+
+    const getInputValue = (inputType, inputName) => {
+        const inputElement = document.getElementById(inputName);
+        if (!inputElement) {
+            return null;
+        }
+
+        if (isArrayInput(inputType)) {
+            return inputElement.value.split(",");
+        } else {
+            return inputElement.value;
+        }
+    };
 
     return (
         <div>
@@ -85,11 +101,11 @@ function ContractReader({rpcUrl, contractAddress, contractABI}) {
                                                         handleCallFunction(
                                                             event,
                                                             entry.name,
-                                                            entry.inputs.map(
-                                                                (_, index) =>
-                                                                    event.target[
-                                                                        `input-${entry.name}-${index}`
-                                                                        ].value
+                                                            entry.inputs.map((input, index) =>
+                                                                getInputValue(
+                                                                    input.type,
+                                                                    `input-${entry.name}-${index}`
+                                                                )
                                                             )
                                                         )
                                                     }

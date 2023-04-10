@@ -26,6 +26,15 @@ function App() {
         setContractABI(event.target.value);
     };
 
+    const isValid = (text) => {
+        try {
+            JSON.parse(text);
+        } catch (e) {
+            return false;
+        }
+        return true;
+    };
+
     return (
         <div className="container-fluid">
             <div className="row">
@@ -67,7 +76,7 @@ function App() {
                         </div>
                     </form>
                     <hr/>
-                    {contractABI && rpcUrl && contractAddress && (
+                    {contractABI && rpcUrl && contractAddress && isValid(contractABI) && (
                         <ContractReader
                             rpcUrl={rpcUrl}
                             contractAddress={contractAddress}
